@@ -3,7 +3,7 @@ let url = "http://127.0.0.1:3000";
 let authed = false;
 
 //some startup logic to get the whole thing started
-function startup() {
+async function startup() {
     //adds functionality if page is right, with prevent of default submit behavior to stop reloading but keep required functionality
     let logBtn = document.getElementById("logBtn");
     if (logBtn != null) {
@@ -12,6 +12,12 @@ function startup() {
     }
     if (authed) {
         console.log("logged in");
+        await getUser(localStorage.getItem("token"));
+        if (document.getElementById("loginHref")) {
+            document.getElementById("loginHref")!.style.display = "none";
+            document.getElementById("hide")!.style.display = "block";
+            document.getElementById("logout")!.style.display = "block";
+        }
     }
 }
 
@@ -33,7 +39,7 @@ async function log() {
     }
     else {
         localStorage.setItem("token", res.token);
-        console.log(res.token);
+        localStorage.setItem("username", obj.username);
     }
     window.location.href = "secretPage.html";
 }
@@ -61,15 +67,12 @@ function clearErr() {
 
 //making sure its all loaded before running, i miss c++
 window.onload = async function() {
-    if (document.URL.includes("login.html") || document.URL.includes("secretPage.html")) {
-        await checkLogin();   
-    }
+    await checkLogin();   
     startup();
 }
 
 async function checkLogin() {
     let val = localStorage.getItem("token");
-    console.log(val);
     if (val != "") {
         let res = await fetch(url + "/secret", {
             method: 'GET',
@@ -78,18 +81,34 @@ async function checkLogin() {
                 'Authorization': 'Bearer ' + val as string
             }
         }).then(response => response.json())
-        if (res) {
+        if (res == true) {
             authed = true;
-            await getUser();
+            window.location.href = "index.html";
             return;
         }
         localStorage.removeItem("token");
     }
     console.log("not logged in");
+}
+
+async function getUser(token) {
+    let user = {
+        username: localStorage.getItem("username")
+    }
+    let res = await fetch(url + "/data", {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    }).then(response => response.json())
+    if (document.URL.includes("login.html")) {
+        window.location.href = "index.html";
+    }
+}
+
+function logOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
     window.location.href = "login.html";
 }
-
-function getUser() {
-    throw new Error("Function not implemented.");
-}
-
