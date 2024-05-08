@@ -1,5 +1,7 @@
 let url = "http://127.0.0.1:3000";
 
+let authed = false;
+
 //some startup logic to get the whole thing started
 function startup() {
     //adds functionality if page is right, with prevent of default submit behavior to stop reloading but keep required functionality
@@ -7,6 +9,9 @@ function startup() {
     if (logBtn != null) {
         logBtn?.addEventListener("click", () => log());   
         console.log("ran");
+    }
+    if (authed) {
+        console.log("logged in");
     }
 }
 
@@ -24,8 +29,13 @@ async function log() {
     }).then(response => response.json())
     if (res.error) {
         errLog(res);
-        console.log(res);
+        return;
     }
+    else {
+        localStorage.setItem("token", res.token);
+        console.log(res.token);
+    }
+    window.location.href = "secretPage.html";
 }
 
 //not sure what format to use here to be honest hence any
@@ -50,6 +60,36 @@ function clearErr() {
 }
 
 //making sure its all loaded before running, i miss c++
-window.onload = function() {
-    startup()
+window.onload = async function() {
+    if (document.URL.includes("login.html") || document.URL.includes("secretPage.html")) {
+        await checkLogin();   
+    }
+    startup();
 }
+
+async function checkLogin() {
+    let val = localStorage.getItem("token");
+    console.log(val);
+    if (val != "") {
+        let res = await fetch(url + "/secret", {
+            method: 'GET',
+            body: null,
+            headers: {
+                'Authorization': 'Bearer ' + val as string
+            }
+        }).then(response => response.json())
+        if (res) {
+            authed = true;
+            await getUser();
+            return;
+        }
+        localStorage.removeItem("token");
+    }
+    console.log("not logged in");
+    window.location.href = "login.html";
+}
+
+function getUser() {
+    throw new Error("Function not implemented.");
+}
+
