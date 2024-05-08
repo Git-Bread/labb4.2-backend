@@ -1,0 +1,129 @@
+$border: solid 1px black;
+$textSize: 1.2em;
+$smallHeader: 1.5em;
+$background1: #98c1d9;
+$background2: #e0fbfc;
+$background3: #293241;
+
+* {
+    font-family:Arial, Helvetica, sans-serif;
+}
+p {
+    max-width: 65ch;
+}
+body {
+    margin: 0;
+    background-color: $background1;
+    display: flex;
+    flex-direction: column;
+    header {
+        @media screen and (max-width: 500px) {
+            flex-direction: column;
+        }
+        display: flex;
+        background-color: $background3;
+        justify-content: space-between;
+        margin-bottom: 2em;
+        h1 {
+            margin-left: 1em;
+            @media screen and (max-width: 700px) {
+                margin-left: 0.2em;
+                margin-bottom: 0;
+            }
+        }
+        h1, a {
+            color: white;
+        }
+        nav {
+            display: flex;
+            @media screen and (min-width: 700px) {
+                width: clamp(200px, 40%, 400px);
+            }
+            @media screen and (max-width: 700px) {
+                flex-direction: column;
+            }
+            justify-content: space-around;
+            margin: auto;
+            margin-right: 0;
+            h2 {
+                white-space: nowrap;
+                @media screen and (max-width: 700px) {
+                    margin: 0.2em;
+                    text-align: end;
+                }
+            }
+        }
+    }
+    section {
+        display: grid;
+        margin: auto;
+        width: clamp(200px, 100%, 2000px);
+        grid-template-columns: 1fr;
+        @media screen and (min-width: 1500px) {
+            grid-template-columns: 1fr 1fr;
+        }
+        row-gap: 2em;
+        column-gap: 2em;
+        article {
+            margin: 1em;
+            background-color: $background2;
+            border: $border;
+            border-radius: 25px;
+            padding: 1em;
+            display: grid;
+            column-gap: 1.5em;
+            grid-template-columns: 1fr;
+            @media screen and (min-width: 1500px) {
+                grid-template-columns: 1fr 1fr;
+            }
+            @media screen and (max-width: 1500px) {
+                margin: auto;
+            }
+            row-gap: 0;
+            picture {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                grid-column: 1;
+                grid-row: 1;
+                img {
+                    width: clamp(150px, 100%, 800px);
+                    border-radius: 25px;
+                }
+            }
+            .bigText {
+                @media screen and (min-width: 1500px) {
+                    grid-column: 2;
+                    grid-row: 1/3;
+                }
+                blockquote {
+                    font-style: italic;
+                }
+            }
+            .smallText {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            div {
+                h1 {
+                    font-size: $smallHeader;
+                }
+                p {
+                    font-size: $textSize;
+                }
+            }
+        }
+    }
+    #foot{
+        background-color: $background3;
+        height: 100%;
+        margin-top: 1em;
+        h5 {
+            color: white;
+            font-size: 2em;
+            margin-top: 1em;
+            text-align: end;
+            margin: 1em;
+        }
+    }
+}
