@@ -12,11 +12,19 @@ async function startup() {
     }
     if (authed) {
         console.log("logged in");
-        await getUser(localStorage.getItem("token"));
-        if (document.getElementById("loginHref")) {
+        if ( document.getElementById("loginHref")) {
             document.getElementById("loginHref")!.style.display = "none";
-            document.getElementById("hide")!.style.display = "block";
+            document.getElementById("hide")!.style.display = "block";   
             document.getElementById("logout")!.style.display = "block";
+        }
+        let ele = document.getElementById("userLogin");
+        ele!.innerHTML = ele!.innerHTML + localStorage.getItem("username") as string;
+        if (document.getElementById("userinfo")) {
+            let val = await getUser(localStorage.getItem("token"));
+            console.log(val);
+            document.getElementById("realName")!.innerHTML = document.getElementById("realName")!.innerHTML + val[0].name;
+            document.getElementById("email")!.innerHTML =  document.getElementById("email")!.innerHTML + val[0].email;
+            document.getElementById("startDate")!.innerHTML =   document.getElementById("startDate")!.innerHTML + val[0].creationDate.split('T')[0];
         }
     }
 }
@@ -83,7 +91,6 @@ async function checkLogin() {
         }).then(response => response.json())
         if (res == true) {
             authed = true;
-            window.location.href = "index.html";
             return;
         }
         localStorage.removeItem("token");
@@ -95,16 +102,16 @@ async function getUser(token) {
     let user = {
         username: localStorage.getItem("username")
     }
+    console.log(JSON.stringify(user));
     let res = await fetch(url + "/data", {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         }
     }).then(response => response.json())
-    if (document.URL.includes("login.html")) {
-        window.location.href = "index.html";
-    }
+    return res;
 }
 
 function logOut() {
