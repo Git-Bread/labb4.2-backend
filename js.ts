@@ -8,7 +8,10 @@ async function startup() {
     let logBtn = document.getElementById("logBtn");
     if (logBtn != null) {
         logBtn?.addEventListener("click", () => log());   
-        console.log("ran");
+    }
+    let regBtn = document.getElementById("reg");
+    if (regBtn != null) {
+        regBtn?.addEventListener("click", () => register());   
     }
     if (authed) {
         console.log("logged in");
@@ -18,7 +21,7 @@ async function startup() {
             document.getElementById("logout")!.style.display = "block";
         }
         let ele = document.getElementById("userLogin");
-        ele!.innerHTML = ele!.innerHTML + localStorage.getItem("username") as string;
+        ele!.innerHTML = "Inloggad Som: "+ localStorage.getItem("username") as string;
         if (document.getElementById("userinfo")) {
             let val = await getUser(localStorage.getItem("token"));
             console.log(val);
@@ -26,6 +29,10 @@ async function startup() {
             document.getElementById("email")!.innerHTML =  document.getElementById("email")!.innerHTML + val[0].email;
             document.getElementById("startDate")!.innerHTML =   document.getElementById("startDate")!.innerHTML + val[0].creationDate.split('T')[0];
         }
+        document.getElementById("logout")?.addEventListener("click", () => logOut());
+    }
+    if (!authed && document.getElementById("userinfo")) {
+        window.location.href = "login.html";
     }
 }
 
@@ -58,7 +65,6 @@ function errLog(objArr: any) {
     let container = document.getElementById("error");
     clearErr();
     for (let index = 0; index < objArr.error.length; index++) {
-        console.log(objArr[index]);
         let element = document.createElement("p");
         element.innerHTML = objArr.error[index];
         container?.append(element);     
@@ -98,11 +104,10 @@ async function checkLogin() {
     console.log("not logged in");
 }
 
-async function getUser(token) {
+async function getUser(token){
     let user = {
         username: localStorage.getItem("username")
     }
-    console.log(JSON.stringify(user));
     let res = await fetch(url + "/data", {
         method: 'POST',
         body: JSON.stringify(user),
@@ -114,8 +119,39 @@ async function getUser(token) {
     return res;
 }
 
-function logOut() {
+function logOut(){
+    console.log("ran");
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     window.location.href = "login.html";
+}
+
+async function register() {
+    let form = document.getElementById("register");
+    //object to update, gets id from select
+    let newEntry = {
+        username: form?.getElementsByTagName("input")[0].value,
+        password: form?.getElementsByTagName("input")[1].value,
+        email: form?.getElementsByTagName("input")[2].value,
+        name: form?.getElementsByTagName("input")[3].value
+    };
+    let res = await fetch(url + "/register", {
+        method: 'POST',
+        body: JSON.stringify(newEntry),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => response.json())
+    if (res.error) {
+        errLog(res);
+        return;
+    }
+    else {
+        clearErr();
+        let container = document.getElementById("error");
+        let ele = document.createElement("p");
+        ele.innerHTML = "Lyckad skapning av nytt konto!";
+        ele.style.backgroundColor = "green";
+        container?.append(ele)
+    }
 }

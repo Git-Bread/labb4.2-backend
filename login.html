@@ -22,17 +22,30 @@
     </header>
     <div id="error">
     </div>
-    <form>
-        <form id="log"> 
-            <h2>Logga in</h2>
-            <label for="username">Användarnamn</label>
-            <input type="text" name="username" id="username" autocomplete="on" maxlength="30" required>
-            <label for="pass">Lösenord</label>
-            <input type="text" name="pass" id="pass" maxlength="30" autocomplete="on" required>
-            <div>
-                <button type="button" id="logBtn">Logga In</button>
-            </div>
-        </form>
+    <form id="log"> 
+        <h2>Logga in</h2>
+        <label for="username">Användarnamn</label>
+        <input type="text" name="username" id="username" autocomplete="on" maxlength="30" required>
+        <label for="pass">Lösenord</label>
+        <input type="text" name="pass" id="pass" maxlength="30" autocomplete="on" required>
+        <div>
+            <button type="button" id="logBtn">Logga In</button>
+        </div>
+    </form>
+    <form id="register"> 
+        <h2>Nytt konto</h2>
+        <label for="newUser">Användarnamn:</label>
+        <input type="text" name="newUser" id="newUser" maxlength="30" autocomplete="on" required>
+        <label for="newPass">Lösenord:</label>
+        <input type="text" name="newPass" id="newPass" maxlength="30" autocomplete="on" required>
+        <label for="newEmail">Email:</label>
+        <input type="email" name="newEmail" id="newEmail" maxlength="30" required>
+        <label for="realName">Riktiga Namn:</label>
+        <input type="text" name="realName" id="realName" maxlength="20" required>
+        <div>
+            <button type="button" id="reg">Klar!</button>
+            <button type="reset" id="resetAdd">Rensa</button>
+        </div>
     </form>
     <picture>
         <source srcset="images/image1.jpg?as=avif&width=600" type="image/avif">
