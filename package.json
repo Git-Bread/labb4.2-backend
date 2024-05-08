@@ -5,8 +5,7 @@
   "source": "index.html",
   "scripts": {
     "build": "parcel build",
-    "run": "parcel",
-    "watch": "parcel watch js.ts"
+    "run": "parcel"
   },
   "author": "Max Gagner (maga2101)",
   "license": "ISC",

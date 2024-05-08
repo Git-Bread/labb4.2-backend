@@ -12,11 +12,19 @@ p {
     max-width: 65ch;
 }
 body {
+    #wrapper {
+        position: relative;
+        min-height: 100vh;
+    }
+    #contentWrap {
+        padding-bottom: 10em; 
+    }
     margin: 0;
     background-color: $background1;
     display: flex;
     flex-direction: column;
     header {
+        width: 100%;
         @media screen and (max-width: 500px) {
             flex-direction: column;
         }
@@ -27,7 +35,7 @@ body {
         h1 {
             margin-left: 1em;
             @media screen and (max-width: 700px) {
-                margin-left: 0.2em;
+                margin-left: 0.4em;
                 margin-bottom: 0;
             }
         }
@@ -48,7 +56,7 @@ body {
             h2 {
                 white-space: nowrap;
                 @media screen and (max-width: 700px) {
-                    margin: 0.2em;
+                    margin: 0.5em;
                     text-align: end;
                 }
             }
@@ -114,13 +122,60 @@ body {
             }
         }
     }
-    form {
+    #error {
+        grid-column: 1;
+        background-color: rgb(243, 88, 88);
+    }
+    #forms {
+        margin-bottom: 2em;
+        @media screen and (max-width: 1500px) {
+            display: flex;
+            flex-direction: column;
+        }
+        form {
+            grid-column: 1;
+            background-color: $background2;
+            display: flex;
+            flex-direction: column;
+            width: clamp(200px, 60%, 800px);
+            padding: 1em;
+            border-radius: 25px;
+            margin: auto;
+            input {
+                max-width: 50%;
+                margin: 0.4em;
+                margin-left: 0;
+            }
+            button {
+                margin-top: 1em;
+            }
+        }
+        picture {
+            grid-column: 2;
+            grid-row: 1/4;
+            align-self: center;
+            img {
+                width: clamp(150px, 100%, 800px);
+            }
+        }
+    }
+    #userinfo {
+        display: flex;
+        flex-direction: column;
         background-color: $background2;
+        width: clamp(200px, 60%, 800px);
+        padding: 1em;
+        border-radius: 25px;
+        h3 {
+            margin: 0.1em;
+        }
     }
     #foot{
         background-color: $background3;
-        height: 100%;
-        margin-top: 1em;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 10em;  
         h2 {
             color: white;
             margin-left: 1em;
